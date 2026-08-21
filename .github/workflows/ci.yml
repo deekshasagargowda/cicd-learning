@@ -1,4 +1,4 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -10,7 +10,9 @@ on:
       - main
 
 jobs:
-  test:
+
+  ci:
+    name: Continuous Integration
     runs-on: ubuntu-latest
 
     steps:
@@ -23,14 +25,16 @@ jobs:
           node-version: 24
 
       - name: Install dependencies
-        run: npm ci 
+        run: npm ci
 
       - name: Run tests
         run: npm test
 
       - name: Build application
         run: npm run build
-cd:
+
+
+  cd:
     name: Continuous Deployment
     needs: ci
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
