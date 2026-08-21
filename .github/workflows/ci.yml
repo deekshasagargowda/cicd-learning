@@ -27,6 +27,17 @@ jobs:
 
       - name: Run tests
         run: npm test
-        
+
       - name: Build application
         run: npm run build
+cd:
+    name: Continuous Deployment
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Render
+        run: curl "$RENDER_DEPLOY_HOOK_URL"
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
